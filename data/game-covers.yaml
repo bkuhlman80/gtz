@@ -1,0 +1,83 @@
+- title: "Doom"
+  year: 1993
+  slug: doom-1993
+  source_page: "https://tcrf.net/Doom_%28PC%2C_1993%29"
+  source_type: "tcrf"
+  image_url: "https://tcrf.net/images/0/07/Doom-TITLEPIC.png"
+
+- title: "The Oregon Trail"
+  year: 1985
+  slug: oregon-trail-1985
+  source_page: "https://en.wikipedia.org/wiki/The_Oregon_Trail_(1985_video_game)"
+  source_type: "wikipedia"
+  image_url: "https://upload.wikimedia.org/wikipedia/en/7/79/The_Oregon_Trail_cover.jpg"
+
+- title: "Street Fighter"
+  year: 1987
+  slug: street-fighter-1987
+  source_page: "https://tcrf.net/Street_Fighter_%28Arcade%29"
+  source_type: "tcrf"
+  image_url: "https://tcrf.net/images/e/e7/StreetFighterArcTitle.png"
+
+- title: "Harvest Moon"
+  year: 1996
+  slug: harvest-moon-1996
+  source_page: "https://tcrf.net/Harvest_Moon_%28SNES%29"
+  source_type: "tcrf"
+  image_url: "https://tcrf.net/images/f/f6/Harvest_Moon_US_title.png"
+
+- title: "Dance Dance Revolution"
+  year: 1998
+  slug: ddr-1998
+  source_page: "https://tcrf.net/Dance_Dance_Revolution_%28Arcade%2C_1998%29"
+  source_type: "tcrf"
+  image_url: "https://tcrf.net/images/e/e2/Ddr1st-title.png"
+
+- title: "EarthBound"
+  year: 1994
+  slug: earthbound-1994
+  source_page: "https://tcrf.net/EarthBound"
+  source_type: "tcrf"
+  image_url: "https://tcrf.net/images/4/4e/Earthbound.png"
+
+- title: "The Legend of Zelda: A Link to the Past"
+  year: 1991
+  slug: zelda-alttp-1991
+  source_page: "https://tcrf.net/The_Legend_of_Zelda%3A_A_Link_to_the_Past"
+  source_type: "tcrf"
+  image_url: "https://tcrf.net/images/a/af/Legend_of_Zelda-_A_Link_to_the_Past-title.png"
+
+- title: "Max Payne"
+  year: 2001
+  slug: max-payne-2001
+  source_page: "https://tcrf.net/Max_Payne_%28Windows%29"
+  source_type: "tcrf"
+  image_url: "https://tcrf.net/images/7/7c/MaxPayneWIN_Title.png"
+
+- title: "Journey"
+  year: 2012
+  slug: journey-2012
+  source_page: "https://en.wikipedia.org/wiki/Journey_(2012_video_game)"
+  source_type: "wikipedia"
+  image_url: "https://upload.wikimedia.org/wikipedia/en/6/64/Journey_Title_Poster.png"
+
+- title: "Altered Beast"
+  year: 1988
+  slug: altered-beast-1988
+  source_page: "https://tcrf.net/Altered_Beast_(Arcade)"
+  source_type: "tcrf"
+  image_url: "https://tcrf.net/images/5/5d/AlteredBeastArcTitle.png"  # example provided
+
+- title: "SimCity 2000"
+  year: 1993
+  slug: simcity-2000-1995
+  source_page: "https://tcrf.net/SimCity_2000_(Mac_OS_Classic)"
+  source_type: "tcrf"
+  image_url: "https://tcrf.net/images/3/38/SimCity_2000_%28Mac_OS_Classic%29_-_Title_v1.0.png"
+
+- title: "Ecco the Dolphin"
+  year: 1992
+  slug: ecco-the-dolphin-1992
+  source_page: "https://tcrf.net/Ecco_the_Dolphin_(Genesis)"
+  source_type: "tcrf"
+  image_url: "https://tcrf.net/images/4/47/Ecco_the_Dolphin-title.png"

@@ -1,0 +1,110 @@
+[
+  {
+    "slug": "doom-1993",
+    "title": "Doom",
+    "year": 1993,
+    "cdn_webp": "/games/doom-1993.webp",
+    "cdn_png": "/games/doom-1993.png",
+    "credit_text": "Image via TCRF",
+    "credit_href": "https://tcrf.net/Doom_%28PC%2C_1993%29"
+  },
+  {
+    "slug": "oregon-trail-1985",
+    "title": "The Oregon Trail",
+    "year": 1985,
+    "cdn_webp": "/games/oregon-trail-1985.webp",
+    "cdn_png": "/games/oregon-trail-1985.png",
+    "credit_text": "Image via Wikipedia",
+    "credit_href": "https://en.wikipedia.org/wiki/The_Oregon_Trail_(1985_video_game)"
+  },
+  {
+    "slug": "street-fighter-1987",
+    "title": "Street Fighter",
+    "year": 1987,
+    "cdn_webp": "/games/street-fighter-1987.webp",
+    "cdn_png": "/games/street-fighter-1987.png",
+    "credit_text": "Image via TCRF",
+    "credit_href": "https://tcrf.net/Street_Fighter_%28Arcade%29"
+  },
+  {
+    "slug": "harvest-moon-1996",
+    "title": "Harvest Moon",
+    "year": 1996,
+    "cdn_webp": "/games/harvest-moon-1996.webp",
+    "cdn_png": "/games/harvest-moon-1996.png",
+    "credit_text": "Image via TCRF",
+    "credit_href": "https://tcrf.net/Harvest_Moon_%28SNES%29"
+  },
+  {
+    "slug": "ddr-1998",
+    "title": "Dance Dance Revolution",
+    "year": 1998,
+    "cdn_webp": "/games/ddr-1998.webp",
+    "cdn_png": "/games/ddr-1998.png",
+    "credit_text": "Image via TCRF",
+    "credit_href": "https://tcrf.net/Dance_Dance_Revolution_%28Arcade%2C_1998%29"
+  },
+  {
+    "slug": "earthbound-1994",
+    "title": "EarthBound",
+    "year": 1994,
+    "cdn_webp": "/games/earthbound-1994.webp",
+    "cdn_png": "/games/earthbound-1994.png",
+    "credit_text": "Image via TCRF",
+    "credit_href": "https://tcrf.net/EarthBound"
+  },
+  {
+    "slug": "zelda-alttp-1991",
+    "title": "The Legend of Zelda: A Link to the Past",
+    "year": 1991,
+    "cdn_webp": "/games/zelda-alttp-1991.webp",
+    "cdn_png": "/games/zelda-alttp-1991.png",
+    "credit_text": "Image via TCRF",
+    "credit_href": "https://tcrf.net/The_Legend_of_Zelda%3A_A_Link_to_the_Past"
+  },
+  {
+    "slug": "max-payne-2001",
+    "title": "Max Payne",
+    "year": 2001,
+    "cdn_webp": "/games/max-payne-2001.webp",
+    "cdn_png": "/games/max-payne-2001.png",
+    "credit_text": "Image via TCRF",
+    "credit_href": "https://tcrf.net/Max_Payne_%28Windows%29"
+  },
+  {
+    "slug": "journey-2012",
+    "title": "Journey",
+    "year": 2012,
+    "cdn_webp": "/games/journey-2012.webp",
+    "cdn_png": "/games/journey-2012.png",
+    "credit_text": "Image via Wikipedia",
+    "credit_href": "https://en.wikipedia.org/wiki/Journey_(2012_video_game)"
+  },
+  {
+    "slug": "altered-beast-1988",
+    "title": "Altered Beast",
+    "year": 1988,
+    "cdn_webp": "/games/altered-beast-1988.webp",
+    "cdn_png": "/games/altered-beast-1988.png",
+    "credit_text": "Image via TCRF",
+    "credit_href": "https://tcrf.net/Altered_Beast_(Arcade)"
+  },
+  {
+    "slug": "simcity-2000-1993",
+    "title": "SimCity 2000",
+    "year": 1993,
+    "cdn_webp": "/games/simcity-2000-1993.webp",
+    "cdn_png": "/games/simcity-2000-1993.png",
+    "credit_text": "Image via TCRF",
+    "credit_href": "https://tcrf.net/SimCity_2000_(Mac_OS_Classic)"
+  },
+  {
+    "slug": "ecco-the-dolphin-1992",
+    "title": "Ecco the Dolphin",
+    "year": 1992,
+    "cdn_webp": "/games/ecco-the-dolphin-1992.webp",
+    "cdn_png": "/games/ecco-the-dolphin-1992.png",
+    "credit_text": "Image via TCRF",
+    "credit_href": "https://tcrf.net/Ecco_the_Dolphin_(Genesis)"
+  }
+]

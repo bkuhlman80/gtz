@@ -1,5 +1,5 @@
-type Props = { slug:string; name:string; dateRange:string; image:string };
-export default function Card({ slug, name, dateRange, image }: Props) {
+type Props = { slug:string; name:string; image:string };
+export default function Card({ slug, name, image }: Props) {
   return (
     <a href={`/sign/${slug}`} className="block rounded-2xl overflow-hidden bg-[#1a1b1d] shadow hover:scale-[1.01] transition">
       <img src={image} alt={name} className="w-full object-cover" />

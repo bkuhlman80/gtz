@@ -3,13 +3,13 @@ import path from "path";
 import matter from "gray-matter";
 
 export type Post = {
-  slug: string;            // filename without .mdx
+  slug: string;
   title: string;
   date: string;
   type?: string;
   cover?: string;
   spotifyUrl?: string;
-  body: string;            // MDX source
+  body: string;
 };
 
 export function getPostsForSign(signSlug: string): Post[] {
@@ -30,5 +30,5 @@ export function getPostsForSign(signSlug: string): Post[] {
         body: content,
       };
     })
-    .sort((a, b) => (a.date < b.date ? 1 : -1)); // newest first
+    .sort((a, b) => (a.date < b.date ? 1 : -1));
 }
