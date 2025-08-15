@@ -11,8 +11,22 @@ export default function Wheel() {
         animate={{ rotate: 360 }}
         transition={{ repeat: Infinity, duration: 120, ease: "linear" }}
       />
-      <img src="/assets/hero/sun.png"  alt="" className="w-20 absolute right-6 top-6" />
-      <img src="/assets/hero/moon.png" alt="" className="w-14 absolute left-6 bottom-6" />
+
+      {/* Sun ~10x visually (tweak sizes as you like) */}
+      <img
+        src="/assets/hero/sun.png"
+        alt=""
+        className="absolute right-[-2rem] top-[-2rem] pointer-events-none select-none
+                   w-[16rem] md:w-[20rem]"
+      />
+
+      {/* Moon ~10x visually */}
+      <img
+        src="/assets/hero/moon.png"
+        alt=""
+        className="absolute left-[-3rem] bottom-[-3rem] pointer-events-none select-none
+                   w-[16rem] md:w-[20rem]"
+      />
     </div>
   );
 }
