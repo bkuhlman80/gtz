@@ -1,4 +1,5 @@
-import covers from "@/public/games/_credits.json";
+
+import covers from "@/data/game-credits.json"; 
 
 export type Cover = {
   slug: string;

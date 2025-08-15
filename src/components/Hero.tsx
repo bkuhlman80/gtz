@@ -9,7 +9,7 @@ export default function Hero(){
 </div>
 
       <div className="max-w-6xl mx-auto px-4 pb-6">
-        <h1 className="text-4xl md:text-6xl font-serif">Tuned by the Sky, Powered by Spotify</h1>
+        <h1 className="text-4xl md:text-6xl font-serif">Welcome to the Starcade</h1>
         <p className="mt-3 opacity-80 max-w-2xl">Explore playlists, art, and posts for every sign.</p>
       </div>
       <Wheel/>

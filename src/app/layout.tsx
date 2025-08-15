@@ -1,6 +1,6 @@
 import "./globals.css";
 
-export const metadata = { title: "Gaming the Zodiac", description: "Mixtapes from the Messenger" };
+export const metadata = { title: "Welcome to the Starcade", description: "Such a Zodiac!" };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

@@ -12,7 +12,7 @@ export default function Wheel() {
         transition={{ repeat: Infinity, duration: 120, ease: "linear" }}
       />
 
-      {/* Sun ~10x visually (tweak sizes as you like) */}
+      {/* Sun */}
       <img
         src="/assets/hero/sun.png"
         alt=""
@@ -20,7 +20,7 @@ export default function Wheel() {
                    w-[16rem] md:w-[20rem]"
       />
 
-      {/* Moon ~10x visually */}
+      {/* Moon */}
       <img
         src="/assets/hero/moon.png"
         alt=""

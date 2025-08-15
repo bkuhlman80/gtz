@@ -1,26 +1,34 @@
+
 import { SIGNS } from "@/data/signs";
 import { notFound } from "next/navigation";
 import { getPostsForSign } from "@/lib/mdx";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import remarkGfm from "remark-gfm";
-
+import GameBlock from "@/components/GameBlock";
+import SpotifyEmbed from "@/components/mdx/SpotifyEmbed";
 import GameCover from "@/components/GameCover";
 import { bySlug as coverBySlug } from "@/lib/covers";
 
+
 type Params = { slug: string };
+type Sign = {
+  slug: string;
+  name: string;
+  image: string;
+  element: string;
+  dateRange?: string;
+  spotifyPlaylistId?: string;
+  gameSlug?: string;
+};
 
 export default async function SignPage({ params }: { params: Promise<Params> }) {
   const { slug } = await params;
 
-  const sign = Array.isArray(SIGNS)
-    ? SIGNS.find((s) => s.slug === slug)
-    : (SIGNS as Record<string, any>)[slug];
+const sign = (SIGNS as ReadonlyArray<Sign>).find((s) => s.slug === slug);
 
   if (!sign) return notFound();
 
   const posts = getPostsForSign(slug);
-
-  // Look up the paired game cover
   const cover = sign.gameSlug ? coverBySlug(sign.gameSlug) : null;
 
   return (
@@ -29,16 +37,12 @@ export default async function SignPage({ params }: { params: Promise<Params> }) 
         <img src={sign.image} alt={sign.name} className="w-24 rounded-xl" />
         <div>
           <h1 className="text-4xl">{sign.name}</h1>
-          <p className="opacity-70">
-            {sign.dateRange} · {sign.element}
-          </p>
+          <p className="opacity-70">{sign.element}</p>
         </div>
       </header>
 
       <section className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-        {/* LEFT: Playlist + posts */}
         <div className="md:col-span-2 space-y-8">
-          {/* Example Spotify iframe – replace with your own logic */}
           {sign.spotifyPlaylistId && (
             <div className="rounded-xl overflow-hidden">
               <iframe
@@ -53,17 +57,14 @@ export default async function SignPage({ params }: { params: Promise<Params> }) 
             </div>
           )}
 
-          {/* Posts */}
           {posts.length === 0 && (
-            <p className="opacity-80">
-              No posts yet. Add `.mdx` files to <code>content/{slug}</code>.
-            </p>
+            <p className="opacity-80">No posts yet. Add <code>content/{slug}</code> files.</p>
           )}
 
           {posts.map((p) => (
             <article
               key={p.slug}
-              className="bg-[#1a1b1d] p-5 rounded-2xl prose prose-invert max-w-none"
+              className="bg-[#1a1b1d] p-5 rounded-2xl prose prose-invert max-w-none space-y-6"
             >
               <h2 className="!mt-0 text-2xl font-bold">{p.title}</h2>
               {p.cover && (
@@ -81,12 +82,12 @@ export default async function SignPage({ params }: { params: Promise<Params> }) 
               <MDXRemote
                 source={p.body}
                 options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }}
+                components={{ GameBlock, SpotifyEmbed }}
               />
             </article>
           ))}
         </div>
 
-        {/* RIGHT: Game cover */}
         <aside className="space-y-4">
           {cover && (
             <GameCover
