@@ -1,5 +1,6 @@
 import Card from "./Card";
 import { SIGN_LIST } from "@/data/signs";
+import Image from "next/image";
 
 export default function CardGrid() {
   return (

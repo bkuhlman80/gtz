@@ -1,4 +1,6 @@
 
+import Image from "next/image";
+
 type Props = { slug: string; name: string; image: string };
 
 export default function Card({ slug, name, image }: Props) {
@@ -7,7 +9,8 @@ export default function Card({ slug, name, image }: Props) {
       href={`/${slug}`}
       className="block rounded-2xl overflow-hidden bg-[#1a1b1d] shadow hover:scale-[1.01] transition"
     >
-      <img src={image} alt={name} className="w-full object-cover" />
+<Image src={image} alt={name} width={400} height={300} className="w-full object-cover" />
+
       <div className="p-4">
         <h3 className="text-xl font-semibold">{name}</h3>
       </div>

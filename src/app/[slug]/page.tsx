@@ -7,6 +7,7 @@ import remarkGfm from "remark-gfm";
 import GameBlock from "@/components/GameBlock";
 import SpotifyEmbed from "@/components/mdx/SpotifyEmbed";
 import Link from "next/link";
+import Image from "next/image";
 import ZoomImg from "@/components/ZoomImg";
 
 type Params = { slug: string };
@@ -36,7 +37,13 @@ export default async function SignPage({ params }: { params: Promise<Params> }) 
       </nav>
 
       <header className="flex items-center gap-4">
-        <img src={sign.image} alt={sign.name} className="w-24 rounded-xl" />
+<Image
+  src={sign.image}
+  alt={sign.name}
+  width={96}
+  height={96}
+  className="w-24 h-24 rounded-xl"
+/>
         <div>
           <h1 className="text-4xl">{sign.name}</h1>
           <p className="opacity-70">{sign.element}</p>
@@ -60,7 +67,7 @@ export default async function SignPage({ params }: { params: Promise<Params> }) 
     {p.cover && (
       <ZoomImg
         src={p.cover}
-        alt={p.cover_alt ?? ""}
+        alt={p.cover_alt ?? `${sign.name} playlist preview`}
         className="mx-auto mt-4 max-w-md rounded-xl border border-neutral-700"
       />
     )}

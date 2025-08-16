@@ -2,10 +2,10 @@ import "./globals.css";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "ZODI",
-  description: "Zodiac playlists + retro game pairings.",
-  openGraph: { title: "Hello, Zodiacs", description: "Zodiac playlists + retro game pairings." },
-  twitter: { title: "Hello, Zodiacs", description: "Zodiac playlists + retro game pairings." },
+  title: "Z0DI",
+  description: "Playlists | Insights | Games",
+  openGraph: { title: "Z0DI", description: "Playlists | Insights | Games" },
+  twitter: { title: "Z0DI", description: "Playlists | Insights | Games" },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

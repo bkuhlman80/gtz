@@ -4,7 +4,7 @@ export default function SubscribeSection() {
     <section id="subscribe" className="max-w-3xl mx-auto px-4 py-16">
       <h2 className="text-3xl font-semibold text-center">Subscribe</h2>
       <p className="mt-2 text-center opacity-80">
-        Get playlists, artwork, gaming picks, and psych insights with each Sun ↔ Moon shift.
+        Get playlists, artwork, gaming picks, and insights with each Sun ↔ Moon shift.
       </p>
 
       {/* Substack embed */}

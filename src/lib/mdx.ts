@@ -8,6 +8,7 @@ export type Post = {
   date: string;
   type?: string;
   cover?: string;
+  cover_alt?: string; 
   spotifyUrl?: string;
   body: string;
 };

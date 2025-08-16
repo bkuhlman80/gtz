@@ -1,4 +1,7 @@
+
 "use client";
+
+import Image from "next/image";
 import { motion } from "framer-motion";
 
 export default function Wheel() {
@@ -13,17 +16,21 @@ export default function Wheel() {
       />
 
       {/* Sun */}
-      <img
+      <Image
         src="/assets/hero/sun.png"
-        alt=""
+        alt="Sol"
+        width={400} 
+        height={300} 
         className="absolute right-[-2rem] top-[-2rem] pointer-events-none select-none
-                   w-[16rem] md:w-[20rem]"
+                   w-[16rem] md:w-[20rem]" 
       />
 
       {/* Moon */}
-      <img
+      <Image
         src="/assets/hero/moon.png"
-        alt=""
+        alt="Luna"
+        width={400} 
+        height={300} 
         className="absolute left-[-3rem] bottom-[-3rem] pointer-events-none select-none
                    w-[16rem] md:w-[20rem]"
       />

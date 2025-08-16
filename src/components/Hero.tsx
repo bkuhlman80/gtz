@@ -1,4 +1,5 @@
 
+import Image from "next/image";
 import Link from "next/link";
 import Wheel from "./Wheel";
 
@@ -6,7 +7,7 @@ export default function Hero() {
   return (
     <header className="relative overflow-hidden">
      <div className="max-w-6xl mx-auto px-4 pt-6 pb-2 flex items-center justify-between"> 
-     <img src="/assets/brand/logo.svg" alt="Zodi" className="h-8 md:h-10" /> 
+<Image src="/assets/brand/logo.svg" alt="Z0DI" width={160} height={40} className="h-8 md:h-10 w-auto" />
      {/* menu button later */} </div> <div className="max-w-6xl mx-auto px-4 pb-6"> 
      <p className="mt-3 opacity-80 max-w-2xl">Explore playlists, insights, and games for every sign.</p>
       </div>
