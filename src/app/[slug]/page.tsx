@@ -1,4 +1,4 @@
-/* eslint-disable @next/next/no-img-element */
+
 import { SIGNS } from "@/data/signs";
 import { notFound } from "next/navigation";
 import { getPostsForSign } from "@/lib/mdx";
@@ -20,6 +20,7 @@ type Sign = {
   element: string;
   modality?: string;
   dateRange?: string;
+  gameSlug?: string;    
 };
 
 export default async function SignPage({ params }: { params: Promise<Params> }) {
