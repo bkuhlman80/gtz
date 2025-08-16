@@ -35,5 +35,11 @@ export default function Wheel() {
                    w-[16rem] md:w-[20rem]"
       />
     </div>
+    
+    
+<div className="pointer-events-none">
+  {/* rotating SVGs or canvases */}
+</div>
+
   );
 }

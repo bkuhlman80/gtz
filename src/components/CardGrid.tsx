@@ -11,3 +11,6 @@ export default function CardGrid() {
     </section>
   );
 }
+
+
+<Card name={s.name} image={s.image} href={`/${s.slug}`} />
