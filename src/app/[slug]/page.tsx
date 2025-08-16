@@ -1,4 +1,3 @@
-
 import { SIGNS } from "@/data/signs";
 import { notFound } from "next/navigation";
 import { getPostsForSign } from "@/lib/mdx";
@@ -8,7 +7,7 @@ import GameBlock from "@/components/GameBlock";
 import SpotifyEmbed from "@/components/mdx/SpotifyEmbed";
 import GameCover from "@/components/GameCover";
 import { bySlug as coverBySlug } from "@/lib/covers";
-
+import Link from "next/link";
 
 type Params = { slug: string };
 type Sign = {
@@ -16,16 +15,16 @@ type Sign = {
   name: string;
   image: string;
   element: string;
+  modality?: string;
   dateRange?: string;
   spotifyPlaylistId?: string;
   gameSlug?: string;
 };
 
-export default async function SignPage({ params }: { params: Promise<Params> }) {
-  const { slug } = await params;
+export default function SignPage({ params }: { params: Params }) {
+  const { slug } = params;
 
-const sign = (SIGNS as ReadonlyArray<Sign>).find((s) => s.slug === slug);
-
+  const sign = (SIGNS as ReadonlyArray<Sign>).find((s) => s.slug === slug);
   if (!sign) return notFound();
 
   const posts = getPostsForSign(slug);
@@ -33,11 +32,19 @@ const sign = (SIGNS as ReadonlyArray<Sign>).find((s) => s.slug === slug);
 
   return (
     <main className="max-w-6xl mx-auto p-4">
+      {/* back link above header */}
+      <nav className="mb-4" aria-label="Breadcrumb">
+        <Link href="/" className="inline-flex items-center text-sm text-amber-400 hover:underline">
+          ← Back to Home
+        </Link>
+      </nav>
+
       <header className="flex items-center gap-4">
         <img src={sign.image} alt={sign.name} className="w-24 rounded-xl" />
         <div>
           <h1 className="text-4xl">{sign.name}</h1>
           <p className="opacity-70">{sign.element}</p>
+          {sign.modality && <p className="opacity-70">{sign.modality}</p>}
         </div>
       </header>
 
@@ -50,15 +57,18 @@ const sign = (SIGNS as ReadonlyArray<Sign>).find((s) => s.slug === slug);
                 src={`https://open.spotify.com/embed/playlist/${sign.spotifyPlaylistId}?utm_source=generator`}
                 width="100%"
                 height="352"
-                frameBorder="0"
+                frameBorder={0}
                 loading="lazy"
                 allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                title={`${sign.name} playlist`}
               />
             </div>
           )}
 
           {posts.length === 0 && (
-            <p className="opacity-80">No posts yet. Add <code>content/{slug}</code> files.</p>
+            <p className="opacity-80">
+              No posts yet. Add <code>content/{slug}</code> files.
+            </p>
           )}
 
           {posts.map((p) => (
@@ -67,16 +77,16 @@ const sign = (SIGNS as ReadonlyArray<Sign>).find((s) => s.slug === slug);
               className="bg-[#1a1b1d] p-5 rounded-2xl prose prose-invert max-w-none space-y-6"
             >
               <h2 className="!mt-0 text-2xl font-bold">{p.title}</h2>
-              {p.cover && (
-                <img src={p.cover} alt="" className="rounded-xl mb-4" />
-              )}
+              {p.cover && <img src={p.cover} alt="" className="rounded-xl mb-4" />}
               {p.spotifyUrl && (
                 <iframe
                   style={{ borderRadius: 12 }}
                   src={`https://open.spotify.com/embed/${p.spotifyUrl.split("open.spotify.com/")[1]}`}
                   width="100%"
                   height="352"
+                  frameBorder={0}
                   allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                  title="Post Spotify embed"
                 />
               )}
               <MDXRemote
