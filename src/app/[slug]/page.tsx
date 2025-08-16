@@ -7,6 +7,7 @@ import remarkGfm from "remark-gfm";
 import GameBlock from "@/components/GameBlock";
 import SpotifyEmbed from "@/components/mdx/SpotifyEmbed";
 import Link from "next/link";
+import ZoomImg from "@/components/ZoomImg";
 
 type Params = { slug: string };
 type Sign = {
@@ -50,21 +51,28 @@ export default async function SignPage({ params }: { params: Promise<Params> }) 
           </p>
         )}
 
-        {posts.map((p) => (
-          <article
-            key={p.slug}
-            className="bg-[#1a1b1d] p-5 rounded-2xl prose prose-invert max-w-none space-y-6"
-          >
-            <h2 className="!mt-0 text-2xl font-bold">{p.title}</h2>
-            {p.cover && <img src={p.cover} alt="" className="rounded-xl mb-4" />}
-            {p.spotifyUrl && <SpotifyEmbed url={p.spotifyUrl} />}
-            <MDXRemote
-              source={p.body}
-              options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }}
-              components={{ GameBlock, SpotifyEmbed }}
-            />
-          </article>
-        ))}
+{posts.map((p) => (
+  <article key={p.slug} className="bg-[#1a1b1d] p-5 rounded-2xl prose prose-invert max-w-none space-y-6">
+    <h2 className="!mt-0 text-2xl font-bold">{p.title}</h2>
+
+    {p.spotifyUrl && <SpotifyEmbed url={p.spotifyUrl} />}
+
+    {p.cover && (
+      <ZoomImg
+        src={p.cover}
+        alt={p.cover_alt ?? ""}
+        className="mx-auto mt-4 max-w-md rounded-xl border border-neutral-700"
+      />
+    )}
+
+    <MDXRemote
+      source={p.body}
+      options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }}
+      components={{ GameBlock, SpotifyEmbed }}
+    />
+  </article>
+))}
+
       </section>
     </main>
   );
