@@ -10,15 +10,14 @@ type Props = {
 export default function GameCover(p: Props) {
   return (
     <figure className="rounded-2xl overflow-hidden border shadow-sm">
-      <Image
-        src={p.cdn_png}                     // use PNG; Next will serve modern formats when supported
+    <Image
+  		src={p.cdn_png}
         alt={p.alt ?? `${p.title} (${p.year}) cover/title art`}
-        width={600}                          // pick approximate intrinsic size
-        height={800}
-        className="w-full h-auto block"
+ 		 width={600}
+ 		 height={800}
+  		className={p.className ?? "w-full h-auto"}
         sizes="(min-width: 768px) 33vw, 100vw"
-        priority={false}
-      />
+        priority={false} />
       <figcaption className="text-xs px-3 py-2 flex items-center justify-between">
         <span>{p.title} ({p.year})</span>
         <a href={p.credit_href} target="_blank" rel="noopener" className="underline opacity-70 hover:opacity-100">

@@ -69,25 +69,31 @@ const cover = sign.gameSlug ? coverBySlug(sign.gameSlug) : null;
     {p.spotifyUrl && <SpotifyEmbed url={p.spotifyUrl} />}
 
 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+  {/* Playlist screenshot */}
   {p.cover && (
-    <ZoomImg
-      src={p.cover}
-      alt={`${sign.name} playlist preview`}
-      className="w-full h-72 md:h-80 object-cover rounded-xl border border-neutral-700"
-    />
+    <div className="w-full h-80 rounded-xl border border-neutral-700 bg-black/30 p-2 flex items-center justify-center">
+      <ZoomImg
+        src={p.cover}
+        alt={`${sign.name} playlist preview`}
+        className="w-full h-full object-contain rounded-lg"
+      />
+    </div>
   )}
 
+  {/* Game art */}
   {cover && (
-    <GameCover
-      title={cover.title}
-      year={cover.year}
-      cdn_webp={cover.cdn_webp}
-      cdn_png={cover.cdn_png}
-      credit_text={cover.credit_text}
-      credit_href={cover.credit_href}
-      alt={`${cover.title} (${cover.year})`}
-      className="w-full h-72 md:h-80 object-cover rounded-xl"
-    />
+    <div className="w-full h-80 rounded-xl border border-neutral-700 bg-black/30 p-2 flex items-center justify-center">
+      <GameCover
+        title={cover.title}
+        year={cover.year}
+        cdn_webp={cover.cdn_webp}
+        cdn_png={cover.cdn_png}
+        credit_text={cover.credit_text}
+        credit_href={cover.credit_href}
+        alt={`${cover.title} (${cover.year})`}
+        className="w-full h-full object-contain rounded-lg"
+      />
+    </div>
   )}
 </div>
 
