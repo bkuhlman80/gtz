@@ -1,6 +1,4 @@
 
-import Image from "next/image";
-
 type Props = { slug: string; name: string; image: string };
 
 export default function Card({ slug, name, image }: Props) {
