@@ -48,55 +48,35 @@ export default async function SignPage({ params }: { params: Promise<Params> }) 
         </div>
       </header>
 
-      <section className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="md:col-span-2 space-y-8">
-          {sign.spotifyPlaylistId && (
-            <div className="rounded-xl overflow-hidden">
-              <iframe
-                style={{ borderRadius: 12 }}
-                src={`https://open.spotify.com/embed/playlist/${sign.spotifyPlaylistId}?utm_source=generator`}
-                width="100%"
-                height="352"
-                frameBorder={0}
-                loading="lazy"
-                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                title={`${sign.name} playlist`}
-              />
-            </div>
-          )}
+<section className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+  <div className="md:col-span-2 space-y-8">
+    {sign.spotifyPlaylistId && (
+      <SpotifyEmbed url={`playlist/${sign.spotifyPlaylistId}`} />
+    )}
 
-          {posts.length === 0 && (
-            <p className="opacity-80">
-              No posts yet. Add <code>content/{slug}</code> files.
-            </p>
-          )}
+    {posts.length === 0 && (
+      <p className="opacity-80">
+        No posts yet. Add <code>content/{slug}</code> files.
+      </p>
+    )}
 
-          {posts.map((p) => (
-            <article
-              key={p.slug}
-              className="bg-[#1a1b1d] p-5 rounded-2xl prose prose-invert max-w-none space-y-6"
-            >
-              <h2 className="!mt-0 text-2xl font-bold">{p.title}</h2>
-              {p.cover && <img src={p.cover} alt="" className="rounded-xl mb-4" />}
-              {p.spotifyUrl && (
-                <iframe
-                  style={{ borderRadius: 12 }}
-                  src={`https://open.spotify.com/embed/${p.spotifyUrl.split("open.spotify.com/")[1]}`}
-                  width="100%"
-                  height="352"
-                  frameBorder={0}
-                  allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                  title="Post Spotify embed"
-                />
-              )}
-              <MDXRemote
-                source={p.body}
-                options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }}
-                components={{ GameBlock, SpotifyEmbed }}
-              />
-            </article>
-          ))}
-        </div>
+    {posts.map((p) => (
+      <article
+        key={p.slug}
+        className="bg-[#1a1b1d] p-5 rounded-2xl prose prose-invert max-w-none space-y-6"
+      >
+        <h2 className="!mt-0 text-2xl font-bold">{p.title}</h2>
+        {p.cover && <img src={p.cover} alt="" className="rounded-xl mb-4" />}
+        {p.spotifyUrl && <SpotifyEmbed url={p.spotifyUrl} />}
+        <MDXRemote
+          source={p.body}
+          options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }}
+          components={{ GameBlock, SpotifyEmbed }}
+        />
+      </article>
+    ))}
+  </div>
+
 
         <aside className="space-y-4">
           {cover && (
