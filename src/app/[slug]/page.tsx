@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { SIGNS } from "@/data/signs";
 import { notFound } from "next/navigation";
 import { getPostsForSign } from "@/lib/mdx";
@@ -21,8 +22,8 @@ type Sign = {
   gameSlug?: string;
 };
 
-export default function SignPage({ params }: { params: Params }) {
-  const { slug } = params;
+export default async function SignPage({ params }: { params: Promise<Params> }) {
+  const { slug } = await params;
 
   const sign = (SIGNS as ReadonlyArray<Sign>).find((s) => s.slug === slug);
   if (!sign) return notFound();
@@ -32,7 +33,6 @@ export default function SignPage({ params }: { params: Params }) {
 
   return (
     <main className="max-w-6xl mx-auto p-4">
-      {/* back link above header */}
       <nav className="mb-4" aria-label="Breadcrumb">
         <Link href="/" className="inline-flex items-center text-sm text-amber-400 hover:underline">
           ← Back to Home
