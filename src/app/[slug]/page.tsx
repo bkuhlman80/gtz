@@ -6,8 +6,6 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import remarkGfm from "remark-gfm";
 import GameBlock from "@/components/GameBlock";
 import SpotifyEmbed from "@/components/mdx/SpotifyEmbed";
-import GameCover from "@/components/GameCover";
-import { bySlug as coverBySlug } from "@/lib/covers";
 import Link from "next/link";
 
 type Params = { slug: string };
@@ -18,8 +16,6 @@ type Sign = {
   element: string;
   modality?: string;
   dateRange?: string;
-  spotifyPlaylistId?: string;
-  gameSlug?: string;
 };
 
 export default async function SignPage({ params }: { params: Promise<Params> }) {
@@ -29,7 +25,6 @@ export default async function SignPage({ params }: { params: Promise<Params> }) 
   if (!sign) return notFound();
 
   const posts = getPostsForSign(slug);
-  const cover = sign.gameSlug ? coverBySlug(sign.gameSlug) : null;
 
   return (
     <main className="max-w-6xl mx-auto p-4">
@@ -48,49 +43,28 @@ export default async function SignPage({ params }: { params: Promise<Params> }) 
         </div>
       </header>
 
-<section className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
-  <div className="md:col-span-2 space-y-8">
-    {sign.spotifyPlaylistId && (
-      <SpotifyEmbed url={`playlist/${sign.spotifyPlaylistId}`} />
-    )}
+      <section className="mt-8 space-y-8">
+        {posts.length === 0 && (
+          <p className="opacity-80">
+            No posts yet. Add <code>content/{slug}</code> files.
+          </p>
+        )}
 
-    {posts.length === 0 && (
-      <p className="opacity-80">
-        No posts yet. Add <code>content/{slug}</code> files.
-      </p>
-    )}
-
-    {posts.map((p) => (
-      <article
-        key={p.slug}
-        className="bg-[#1a1b1d] p-5 rounded-2xl prose prose-invert max-w-none space-y-6"
-      >
-        <h2 className="!mt-0 text-2xl font-bold">{p.title}</h2>
-        {p.cover && <img src={p.cover} alt="" className="rounded-xl mb-4" />}
-        {p.spotifyUrl && <SpotifyEmbed url={p.spotifyUrl} />}
-        <MDXRemote
-          source={p.body}
-          options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }}
-          components={{ GameBlock, SpotifyEmbed }}
-        />
-      </article>
-    ))}
-  </div>
-
-
-        <aside className="space-y-4">
-          {cover && (
-            <GameCover
-              title={cover.title}
-              year={cover.year}
-              cdn_webp={cover.cdn_webp}
-              cdn_png={cover.cdn_png}
-              credit_text={cover.credit_text}
-              credit_href={cover.credit_href}
-              alt={`${cover.title} (${cover.year})`}
+        {posts.map((p) => (
+          <article
+            key={p.slug}
+            className="bg-[#1a1b1d] p-5 rounded-2xl prose prose-invert max-w-none space-y-6"
+          >
+            <h2 className="!mt-0 text-2xl font-bold">{p.title}</h2>
+            {p.cover && <img src={p.cover} alt="" className="rounded-xl mb-4" />}
+            {p.spotifyUrl && <SpotifyEmbed url={p.spotifyUrl} />}
+            <MDXRemote
+              source={p.body}
+              options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }}
+              components={{ GameBlock, SpotifyEmbed }}
             />
-          )}
-        </aside>
+          </article>
+        ))}
       </section>
     </main>
   );
