@@ -5,6 +5,8 @@ import { getPostsForSign } from "@/lib/mdx";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import remarkGfm from "remark-gfm";
 import GameBlock from "@/components/GameBlock";
+import GameCover from "@/components/GameCover";
+import { bySlug as coverBySlug } from "@/lib/covers";
 import SpotifyEmbed from "@/components/mdx/SpotifyEmbed";
 import Link from "next/link";
 import Image from "next/image";
@@ -27,6 +29,8 @@ export default async function SignPage({ params }: { params: Promise<Params> }) 
   if (!sign) return notFound();
 
   const posts = getPostsForSign(slug);
+
+const cover = sign.gameSlug ? coverBySlug(sign.gameSlug) : null;
 
   return (
     <main className="max-w-6xl mx-auto p-4">
@@ -64,13 +68,29 @@ export default async function SignPage({ params }: { params: Promise<Params> }) 
 
     {p.spotifyUrl && <SpotifyEmbed url={p.spotifyUrl} />}
 
-    {p.cover && (
-      <ZoomImg
-        src={p.cover}
-        alt={p.cover_alt ?? `${sign.name} playlist preview`}
-        className="mx-auto mt-4 max-w-md rounded-xl border border-neutral-700"
-      />
-    )}
+<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+  {p.cover && (
+    <ZoomImg
+      src={p.cover}
+      alt={`${sign.name} playlist preview`}
+      className="w-full h-72 md:h-80 object-cover rounded-xl border border-neutral-700"
+    />
+  )}
+
+  {cover && (
+    <GameCover
+      title={cover.title}
+      year={cover.year}
+      cdn_webp={cover.cdn_webp}
+      cdn_png={cover.cdn_png}
+      credit_text={cover.credit_text}
+      credit_href={cover.credit_href}
+      alt={`${cover.title} (${cover.year})`}
+      className="w-full h-72 md:h-80 object-cover rounded-xl"
+    />
+  )}
+</div>
+
 
     <MDXRemote
       source={p.body}
