@@ -1,4 +1,6 @@
 
+import Card from "@/components/Card"; 
+
 export default function Landing() {
   return (
     <main
