@@ -1,11 +1,9 @@
+
 import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
-  testDir: './tests',
-  use: {
-    baseURL: 'https://gtz-one.vercel.app',
-    trace: 'on-first-retry',
-  },
+  reporter: [['html', { open: 'never' }], ['list']],
+  use: { baseURL: 'https://gtz-one.vercel.app', trace: 'on-first-retry' },
   projects: [
     { name: 'Desktop Chrome', use: { ...devices['Desktop Chrome'] } },
     { name: 'Desktop Safari', use: { ...devices['Desktop Safari'] } },

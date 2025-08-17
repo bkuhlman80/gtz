@@ -8,9 +8,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-  "test:ui": "playwright test",
-  "test:ui:headed": "playwright test --headed",
-  "test:report": "playwright show-report"
+    "test:ui": "playwright test --reporter=html",
+    "test:ui:headed": "playwright test --headed --reporter=html",
+    "test:report": "playwright show-report"
   },
   "dependencies": {
     "@vercel/analytics": "^1.5.0",
