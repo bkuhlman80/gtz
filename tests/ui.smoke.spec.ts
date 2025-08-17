@@ -10,6 +10,8 @@ for (const vp of vps) {
   test(`landing page layout @ ${vp.name}`, async ({ page }, testInfo) => {
     await page.setViewportSize(vp.size);
     await page.goto('/', { waitUntil: 'networkidle' });
+    await expect(page.evaluate(() => 
+    	getComputedStyle(document.documentElement).fontSize)).resolves.toBe('16px');
 
     // Always capture a screenshot for debugging
     await page.screenshot({ path: `screens/${vp.name}-precheck.png`, fullPage: true });

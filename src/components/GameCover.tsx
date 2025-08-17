@@ -5,7 +5,7 @@ type Props = {
   cdn_webp: string; cdn_png: string;
   credit_text: string; credit_href: string;
   alt?: string;
-  className?: string;            // <-- add
+  className?: string;          
 };
 
 export default function GameCover(p: Props) {

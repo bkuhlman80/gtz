@@ -1,5 +1,7 @@
-import "./globals.css";
+
 import type { Metadata } from "next";
+import "./globals.css";
+import ZoomBadge from "@/components/ZoomBadge";
 
 export const metadata: Metadata = {
   title: "Z0DI",
@@ -11,7 +13,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="bg-[#0f0f10] text-[#e9dfcf] antialiased">{children}</body>
+      <body>
+        {children}
+        <ZoomBadge /> {/* shows only in development */}
+      </body>
     </html>
   );
 }

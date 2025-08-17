@@ -95,7 +95,7 @@ export const SIGNS = [
     image: "/assets/signs/aquarius.png",
     element: "🌬 Air",
     modality: "🔒 Fixed",
-    gameSlug: "simcity-2000-1995",
+    gameSlug: "simcity-2000-1993",
     spotifyPlaylistId: "52ZQ4IZfKN7Y3viWJIJlmg"
   },
   {

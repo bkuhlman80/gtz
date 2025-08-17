@@ -1,4 +1,4 @@
-// src/components/GameBlock.tsx
+
 import GameCover from "@/components/GameCover";
 import { bySlug } from "@/lib/covers";
 
