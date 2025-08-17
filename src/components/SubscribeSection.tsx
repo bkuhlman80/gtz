@@ -7,14 +7,14 @@ export default function SubscribeSection() {
         Get playlists, artwork, gaming picks, and insights with each Sun ↔ Moon shift.
       </p>
 
-      <div className="mt-6 rounded-2xl overflow-hidden border border-neutral-700 bg-[#1a1b1d]">
+      <div data-testid="subscribe" className="mt-6 rounded-2xl overflow-hidden border border-neutral-700 bg-[#1a1b1d]">
         {/* Substack iframe embed */}
         <iframe
+          title="Substack Subscribe"
           src="https://z0di.substack.com/embed"
           width="100%"
           height="320"
           style={{ border: "0", background: "transparent" }}
-          title="Substack Subscribe"
         />
       </div>
 

@@ -34,7 +34,7 @@ export default function SpotifyEmbed({ url, height = 352 }: Props) {
   return (
     <div className="w-full">
       {/* Desktop/tablet: keep iframe */}
-      <div className="hidden md:block rounded-xl overflow-hidden">
+      <div data-testid="spotify-embed" className="hidden md:block rounded-xl overflow-hidden">
         <iframe
           title="Spotify embed"
           src={embedSrc}

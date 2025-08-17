@@ -12,7 +12,7 @@ export default function SpotifySmartEmbed({ playlistIdOrPath, title }: Props) {
   return (
     <div className="w-full">
       {/* Desktop/tablet: keep iframe */}
-      <div className="hidden md:block rounded-xl overflow-hidden">
+      <div data-testid="subscribe" className="hidden md:block rounded-xl overflow-hidden">
         <iframe
           title={title ?? "Spotify embed"}
           src={src}

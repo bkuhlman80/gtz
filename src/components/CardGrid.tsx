@@ -3,7 +3,10 @@ import Card from "./Card";
 
 export default function CardGrid() {
   return (
-    <section className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-8">
+    <section
+      data-testid="card-grid"
+      className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-8"
+    >
       {SIGNS.map((s) => (
         <Card
           key={s.slug}
