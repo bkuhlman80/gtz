@@ -12,14 +12,19 @@ import Image from "next/image";
 import ZoomImg from "@/components/ZoomImg";
 import { getPostsBySign, type SubstackItem } from "@/lib/substack";
 import { Suspense } from "react";
+import type { Metadata } from "next";
+
 
 type Sign = {
   slug: string; name: string; image: string; element: string;
   modality?: string; dateRange?: string; gameSlug?: string;
 };
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const sign = (SIGNS as readonly Sign[]).find(s => s.slug === params.slug);
+export async function generateMetadata(
+  { params }: { params: Promise<{ slug: string }> }
+): Promise<Metadata> {
+  const { slug } = await params;
+  const sign = SIGNS.find(s => s.slug === slug);
   if (!sign) return {};
   const og = `/og/signs/${sign.slug}.png`;
   return {
@@ -28,6 +33,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     twitter: { card: "summary_large_image", images: [og] },
   };
 }
+
 
 async function SubstackSection({ slug }: { slug: string }) {
   const items: SubstackItem[] = await getPostsBySign(slug);
@@ -58,13 +64,17 @@ async function SubstackSection({ slug }: { slug: string }) {
   );
 }
 
-export default async function SignPage({ params }: { params: { slug: string } }) {
-  const { slug } = params;
-  const sign = (SIGNS as readonly Sign[]).find(s => s.slug === slug);
+export default async function SignPage(
+  { params }: { params: Promise<{ slug: string }> }
+) {
+  const { slug } = await params;
+  const sign = SIGNS.find(s => s.slug === slug);
   if (!sign) return notFound();
 
   const posts = getPostsForSign(slug);
   const cover = sign.gameSlug ? coverBySlug(sign.gameSlug) : null;
+  
+  
 
   return (
     <main className="max-w-6xl mx-auto p-4">
