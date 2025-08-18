@@ -14,25 +14,27 @@ import ZoomImg from "@/components/ZoomImg";
 
 type Params = { slug: string };
 type Sign = {
-  slug: string;
-  name: string;
-  image: string;
-  element: string;
-  modality?: string;
-  dateRange?: string;
-  gameSlug?: string;    
+  slug: string; name: string; image: string; element: string;
+  modality?: string; dateRange?: string; gameSlug?: string;
 };
 
-export default async function SignPage({ params }: { params: Promise<Params> }) {
-  const { slug } = await params;
+export async function generateMetadata({ params }: { params: Params }) {
+  const sign = (SIGNS as ReadonlyArray<Sign>).find(s => s.slug === params.slug);
+  if (!sign) return {};
+  const og = `/og/signs/${sign.slug}.png`; // put files in public/og/signs/
+  return {
+    title: `${sign.name} Gaming`,
+    openGraph: { images: [og] },
+    twitter: { card: "summary_large_image", images: [og] },
+  };
+}
 
-  const sign = (SIGNS as ReadonlyArray<Sign>).find((s) => s.slug === slug);
+export default async function SignPage({ params }: { params: Params }) {
+  const { slug } = params; // no Promise
+  const sign = (SIGNS as ReadonlyArray<Sign>).find(s => s.slug === slug);
   if (!sign) return notFound();
-
   const posts = getPostsForSign(slug);
-
-const cover = sign.gameSlug ? coverBySlug(sign.gameSlug) : null;
-
+  const cover = sign.gameSlug ? coverBySlug(sign.gameSlug) : null;
   return (
     <main className="max-w-6xl mx-auto p-4">
       <nav className="mb-4" aria-label="Breadcrumb">
