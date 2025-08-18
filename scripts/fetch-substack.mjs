@@ -30,17 +30,13 @@ const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
 const tagsFromHtmlLinks = (html = "") => {
   const out = new Set();
-  for (const m of html.matchAll(/href=["']https?:\/\/[^"']+\/t\/([^"'/?#]+)["']/gi)) {
-    out.add(normTag(m[1]));
-  }
+  for (const m of html.matchAll(/href=["']https?:\/\/[^"']+\/t\/([^"'/?#]+)["']/gi)) out.add(normTag(m[1]));
   return [...out].filter(Boolean);
 };
 
 const tagsFromHashtags = (text = "") => {
   const out = new Set();
-  for (const m of text.matchAll(/(^|\s)#([a-z][a-z0-9_-]{1,30})\b/gi)) {
-    out.add(normTag(m[2]));
-  }
+  for (const m of text.matchAll(/(^|\s)#([a-z][a-z0-9_-]{1,30})\b/gi)) out.add(normTag(m[2]));
   return [...out].filter(Boolean);
 };
 
@@ -75,7 +71,9 @@ const firstPara = (html="") => {
 const normalizeItem = (it) => {
   const raw = it["content:encoded"] || it.content || "";
   const desc = it.description || "";
-  const tCats = tagsFromCategories(it.categories);
+  const tCats = Array.isArray(it.categories)
+    ? it.categories.map(normTag).filter(Boolean)
+    : [];
   const tLinks = tagsFromHtmlLinks(raw);
   const tHash  = tagsFromHashtags(raw + " " + desc + " " + (it.title || ""));
   const tags = [...new Set([...tCats, ...tLinks, ...tHash])];
@@ -88,7 +86,7 @@ const normalizeItem = (it) => {
     tags,
     excerpt: stripHtml(it.contentSnippet || raw || ""),
     subtitle: firstPara(raw) || null,
-    image: firstImg(raw)
+    image: firstImg(raw),
   };
 };
 
