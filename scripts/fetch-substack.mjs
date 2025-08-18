@@ -60,14 +60,30 @@ const normTag = (t) => {
 const stripHtml = (s = "") =>
   s.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
 
-const normalizeItem = (it) => ({
-  id: it.guid || it.id || it.link,
-  title: it.title || "",
-  url: it.link || "",
-  isoDate: it.isoDate || (it.pubDate ? new Date(it.pubDate).toISOString() : null),
-  tags: (it.categories || []).map(normTag).filter(Boolean),
-  excerpt: stripHtml(it.contentSnippet || it.content || it["content:encoded"] || "")
-});
+const firstImg = (html="") => {
+  const m = html.match(/<img[^>]+src=["']([^"']+)["']/i);
+  return m?.[1] || null;
+};
+const firstPara = (html="") => {
+  const m = html.match(/<p>([\s\S]*?)<\/p>/i);
+  if (!m) return null;
+  const text = stripHtml(m[1]);
+  return text.length <= 200 ? text : text.slice(0, 197) + "…";
+};
+
+const normalizeItem = (it) => {
+  const raw = it["content:encoded"] || it.content || "";
+  return {
+    id: it.guid || it.id || it.link,
+    title: it.title || "",
+    url: it.link || "",
+    isoDate: it.isoDate || (it.pubDate ? new Date(it.pubDate).toISOString() : null),
+    tags: (it.categories || []).map(normTag).filter(Boolean),
+    excerpt: stripHtml(it.contentSnippet || raw || ""),
+    subtitle: firstPara(raw) || null,
+    image: firstImg(raw)
+  };
+};
 
 const sortDesc = (a, b) => String(b.isoDate || "").localeCompare(String(a.isoDate || ""));
 

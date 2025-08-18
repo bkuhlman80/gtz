@@ -5,7 +5,9 @@
     "url": "https://z0di.substack.com/p/gaming-the-zodiac",
     "isoDate": "2025-08-16T04:05:42.000Z",
     "tags": [],
-    "excerpt": "Playlist covers -- gotta love that 8bit nostalgia"
+    "excerpt": "Playlist covers -- gotta love that 8bit nostalgia",
+    "subtitle": null,
+    "image": "https://substackcdn.com/image/fetch/$s_!3Evc!,w_1456,c_limit,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F9b97475f-a6da-4e8b-87a6-736199ddfdb7_832x1092.png"
   },
   {
     "id": "https://z0di.substack.com/p/coming-soon",
@@ -13,6 +15,8 @@
     "url": "https://z0di.substack.com/p/coming-soon",
     "isoDate": "2025-08-16T04:00:36.000Z",
     "tags": [],
-    "excerpt": "This is Z0DI."
+    "excerpt": "This is Z0DI.",
+    "subtitle": "This is Z0DI.",
+    "image": null
   }
 ]
