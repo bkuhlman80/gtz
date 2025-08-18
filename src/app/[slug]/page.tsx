@@ -11,6 +11,7 @@ import SpotifyEmbed from "@/components/mdx/SpotifyEmbed";
 import Link from "next/link";
 import Image from "next/image";
 import ZoomImg from "@/components/ZoomImg";
+import type { Metadata, ResolvingMetadata } from "next";
 
 type Params = { slug: string };
 type Sign = {
