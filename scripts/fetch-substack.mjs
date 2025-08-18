@@ -7,6 +7,7 @@ const ROOT = process.cwd();
 const OUT = path.join(ROOT, "data", "substack");
 const BYTAG = path.join(OUT, "byTag");
 const FEED_BASE = "https://z0di.substack.com/feed";
+const PROXY_BASE = process.env.PROXY_BASE || ""; // e.g. https://gtz-one.vercel.app/api/rss-proxy?url=
 
 const SIGNS = [
   "aries","taurus","gemini","cancer","leo","virgo",
@@ -24,10 +25,13 @@ const UA =
 
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
+
+
 async function fetchFeedString(url) {
-  const res = await fetch(url, {
+  const target = PROXY_BASE ? `${PROXY_BASE}${encodeURIComponent(url)}` : url;
+  const res = await fetch(target, {
     headers: {
-      "User-Agent": UA,
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36",
       "Accept": "application/rss+xml, application/xml;q=0.9, */*;q=0.8",
       "Accept-Language": "en-US,en;q=0.9",
       "Referer": "https://z0di.substack.com/"
