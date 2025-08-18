@@ -1,7 +1,10 @@
-// scripts/fetch-substack.mjs
+
+
 import fs from "fs/promises";
 import path from "path";
 import Parser from "rss-parser";
+
+
 
 const ROOT = process.cwd();
 const OUT = path.join(ROOT, "data", "substack");
@@ -25,6 +28,71 @@ const UA =
 
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
+const tagsFromHtmlLinks = (html = "") => {
+  const out = new Set();
+  for (const m of html.matchAll(/href=["']https?:\/\/[^"']+\/t\/([^"'/?#]+)["']/gi)) {
+    out.add(normTag(m[1]));
+  }
+  return [...out].filter(Boolean);
+};
+
+const tagsFromHashtags = (text = "") => {
+  const out = new Set();
+  for (const m of text.matchAll(/(^|\s)#([a-z][a-z0-9_-]{1,30})\b/gi)) {
+    out.add(normTag(m[2]));
+  }
+  return [...out].filter(Boolean);
+};
+
+const tagsFromCategories = (cats) => {
+  if (!cats) return [];
+  const arr = Array.isArray(cats) ? cats : [cats];
+  return arr
+    .map((c) => (typeof c === "string" ? c : c?.term || c?._ || c?.name || ""))
+    .map(normTag)
+    .filter(Boolean);
+};
+
+
+const normTag = (t) => {
+  if (!t) return null;
+  const v = String(t).trim().toLowerCase();
+  return ALIAS.get(v) || v;
+};
+const stripHtml = (s="") => s.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+
+const firstImg = (html="") => {
+  const m = html.match(/<img[^>]+src=["']([^"']+)["']/i);
+  return m?.[1] || null;
+};
+const firstPara = (html="") => {
+  const m = html.match(/<p>([\s\S]*?)<\/p>/i);
+  if (!m) return null;
+  const text = stripHtml(m[1]);
+  return text.length <= 200 ? text : text.slice(0, 197) + "…";
+};
+
+const normalizeItem = (it) => {
+  const raw = it["content:encoded"] || it.content || "";
+  const desc = it.description || "";
+  const tCats = tagsFromCategories(it.categories);
+  const tLinks = tagsFromHtmlLinks(raw);
+  const tHash  = tagsFromHashtags(raw + " " + desc + " " + (it.title || ""));
+  const tags = [...new Set([...tCats, ...tLinks, ...tHash])];
+
+  return {
+    id: it.guid || it.id || it.link,
+    title: it.title || "",
+    url: it.link || "",
+    isoDate: it.isoDate || (it.pubDate ? new Date(it.pubDate).toISOString() : null),
+    tags,
+    excerpt: stripHtml(it.contentSnippet || raw || ""),
+    subtitle: firstPara(raw) || null,
+    image: firstImg(raw)
+  };
+};
+
+const sortDesc = (a, b) => String(b.isoDate || "").localeCompare(String(a.isoDate || ""));
 
 
 async function fetchFeedString(url) {
@@ -60,40 +128,6 @@ async function fetchFeedWithFallbacks(baseUrl) {
   }
   throw lastErr || new Error("All RSS fallbacks failed");
 }
-
-const normTag = (t) => {
-  if (!t) return null;
-  const v = String(t).trim().toLowerCase();
-  return ALIAS.get(v) || v;
-};
-const stripHtml = (s="") => s.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
-
-const firstImg = (html="") => {
-  const m = html.match(/<img[^>]+src=["']([^"']+)["']/i);
-  return m?.[1] || null;
-};
-const firstPara = (html="") => {
-  const m = html.match(/<p>([\s\S]*?)<\/p>/i);
-  if (!m) return null;
-  const text = stripHtml(m[1]);
-  return text.length <= 200 ? text : text.slice(0, 197) + "…";
-};
-
-const normalizeItem = (it) => {
-  const raw = it["content:encoded"] || it.content || "";
-  return {
-    id: it.guid || it.id || it.link,
-    title: it.title || "",
-    url: it.link || "",
-    isoDate: it.isoDate || (it.pubDate ? new Date(it.pubDate).toISOString() : null),
-    tags: (it.categories || []).map(normTag).filter(Boolean),
-    excerpt: stripHtml(it.contentSnippet || raw || ""),
-    subtitle: firstPara(raw) || null,
-    image: firstImg(raw)
-  };
-};
-
-const sortDesc = (a, b) => String(b.isoDate || "").localeCompare(String(a.isoDate || ""));
 
 async function writeJSON(file, data) {
   await fs.mkdir(path.dirname(file), { recursive: true });
