@@ -11,10 +11,8 @@ import SpotifyEmbed from "@/components/mdx/SpotifyEmbed";
 import Link from "next/link";
 import Image from "next/image";
 import ZoomImg from "@/components/ZoomImg";
-import type { Metadata, ResolvingMetadata } from "next";
-import { getPostsBySign } from "@/lib/substack";
+import { getPostsBySign, type SubstackItem } from "@/lib/substack";
 
-type Params = { slug: string };
 type Sign = {
   slug: string; name: string; image: string; element: string;
   modality?: string; dateRange?: string; gameSlug?: string;
@@ -33,13 +31,13 @@ export async function generateMetadata({ params }: any) {
 }
 
 async function SubstackSection({ slug }: { slug: string }) {
-  const items = await getPostsBySign(slug);
+  const items: SubstackItem[] = await getPostsBySign(slug);
   if (!items?.length) return null;
   return (
     <section className="mt-12">
       <h2 className="text-2xl font-bold">From Substack</h2>
       <ul className="mt-4 space-y-3">
-        {items.map((it: any) => (
+        {items.map((it: SubstackItem) => (
           <li key={it.id}>
             <a className="underline" href={it.url}>{it.title}</a>
           </li>
