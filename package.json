@@ -2,12 +2,12 @@
   "name": "gtz",
   "version": "0.1.0",
   "private": true,
- 
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "rm -rf .next && next build",
     "start": "next start",
     "lint": "next lint",
+    "substack:pull": "node scripts/fetch-substack.mjs",
     "test:ui": "playwright test --reporter=html",
     "test:ui:headed": "playwright test --headed --reporter=html",
     "test:report": "playwright show-report"
@@ -20,8 +20,9 @@
     "next-mdx-remote": "^5.0.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
-    "remark-gfm": "^4.0.1"
-  }, 
+    "remark-gfm": "^4.0.1",
+    "rss-parser": "^3.13.0"
+  },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@playwright/test": "^1.54.2",
