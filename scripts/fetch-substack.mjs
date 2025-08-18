@@ -1,66 +1,33 @@
-
-
+// scripts/fetch-substack.mjs
 import fs from "fs/promises";
 import path from "path";
 import Parser from "rss-parser";
-
-
 
 const ROOT = process.cwd();
 const OUT = path.join(ROOT, "data", "substack");
 const BYTAG = path.join(OUT, "byTag");
 const FEED_BASE = "https://z0di.substack.com/feed";
-const PROXY_BASE = process.env.PROXY_BASE || ""; // e.g. https://gtz-one.vercel.app/api/rss-proxy?url=
+const PROXY_BASE = process.env.PROXY_BASE || "";
 
 const SIGNS = [
   "aries","taurus","gemini","cancer","leo","virgo",
   "libra","scorpio","sagittarius","capricorn","aquarius","pisces"
 ];
 
-const ALIAS = new Map([
-  ["sag", "sagittarius"],
-  ["scorp", "scorpio"]
-]);
-
-const parser = new Parser(); // we parse strings, not URLs
+const ALIAS = new Map([["sag","sagittarius"],["scorp","scorpio"]]);
+const parser = new Parser();
 const UA =
   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36";
-
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
-const tagsFromHtmlLinks = (html = "") => {
-  const out = new Set();
-  for (const m of html.matchAll(/href=["']https?:\/\/[^"']+\/t\/([^"'/?#]+)["']/gi)) out.add(normTag(m[1]));
-  return [...out].filter(Boolean);
-};
-
-const tagsFromHashtags = (text = "") => {
-  const out = new Set();
-  for (const m of text.matchAll(/(^|\s)#([a-z][a-z0-9_-]{1,30})\b/gi)) out.add(normTag(m[2]));
-  return [...out].filter(Boolean);
-};
-
-const tagsFromCategories = (cats) => {
-  if (!cats) return [];
-  const arr = Array.isArray(cats) ? cats : [cats];
-  return arr
-    .map((c) => (typeof c === "string" ? c : c?.term || c?._ || c?.name || ""))
-    .map(normTag)
-    .filter(Boolean);
-};
-
-
+// ---------- helpers ----------
 const normTag = (t) => {
   if (!t) return null;
   const v = String(t).trim().toLowerCase();
   return ALIAS.get(v) || v;
 };
 const stripHtml = (s="") => s.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
-
-const firstImg = (html="") => {
-  const m = html.match(/<img[^>]+src=["']([^"']+)["']/i);
-  return m?.[1] || null;
-};
+const firstImg = (html="") => html.match(/<img[^>]+src=["']([^"']+)["']/i)?.[1] || null;
 const firstPara = (html="") => {
   const m = html.match(/<p>([\s\S]*?)<\/p>/i);
   if (!m) return null;
@@ -68,15 +35,43 @@ const firstPara = (html="") => {
   return text.length <= 200 ? text : text.slice(0, 197) + "…";
 };
 
+// tagging
+const tagsFromHtmlLinks = (html = "") => {
+  const out = new Set();
+  for (const m of html.matchAll(/href=["']https?:\/\/[^"']+\/t\/([^"'/?#]+)["']/gi)) out.add(normTag(m[1]));
+  return [...out].filter(Boolean);
+};
+const tagsFromHashtags = (text = "") => {
+  const out = new Set();
+  for (const m of text.matchAll(/(^|[^A-Za-z0-9_&])#([a-z][a-z0-9_-]{1,30})/gi)) out.add(normTag(m[2]));
+  return [...out].filter(Boolean);
+};
+const tagsFromPlainTextSigns = (text = "", SIGNS_LIST = []) => {
+  const s = stripHtml(text).toLowerCase();
+  const out = [];
+  for (const sign of SIGNS_LIST) {
+    const re = new RegExp(`(^|\\W)${sign}(\\W|$)`, "i");
+    if (re.test(s)) out.push(sign);
+  }
+  return out;
+};
+
+// ---------- normalize ----------
 const normalizeItem = (it) => {
   const raw = it["content:encoded"] || it.content || "";
   const desc = it.description || "";
+
   const tCats = Array.isArray(it.categories)
     ? it.categories.map(normTag).filter(Boolean)
     : [];
+
   const tLinks = tagsFromHtmlLinks(raw);
   const tHash  = tagsFromHashtags(raw + " " + desc + " " + (it.title || ""));
-  const tags = [...new Set([...tCats, ...tLinks, ...tHash])];
+  let tags = [...new Set([...tCats, ...tLinks, ...tHash])];
+
+  if (tags.length === 0) {
+    tags = [...new Set(tagsFromPlainTextSigns(raw + " " + desc + " " + (it.title || ""), SIGNS))];
+  }
 
   return {
     id: it.guid || it.id || it.link,
@@ -92,12 +87,12 @@ const normalizeItem = (it) => {
 
 const sortDesc = (a, b) => String(b.isoDate || "").localeCompare(String(a.isoDate || ""));
 
-
+// ---------- fetch ----------
 async function fetchFeedString(url) {
   const target = PROXY_BASE ? `${PROXY_BASE}${encodeURIComponent(url)}` : url;
   const res = await fetch(target, {
     headers: {
-      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36",
+      "User-Agent": UA,
       "Accept": "application/rss+xml, application/xml;q=0.9, */*;q=0.8",
       "Accept-Language": "en-US,en;q=0.9",
       "Referer": "https://z0di.substack.com/"
@@ -106,7 +101,6 @@ async function fetchFeedString(url) {
   if (!res.ok) throw new Error(`HTTP ${res.status} for ${url}`);
   return res.text();
 }
-
 async function fetchFeedWithFallbacks(baseUrl) {
   const urls = [baseUrl, baseUrl.replace(/\/feed$/, "/feed.rss")];
   let lastErr;
@@ -127,11 +121,11 @@ async function fetchFeedWithFallbacks(baseUrl) {
   throw lastErr || new Error("All RSS fallbacks failed");
 }
 
+// ---------- io ----------
 async function writeJSON(file, data) {
   await fs.mkdir(path.dirname(file), { recursive: true });
   await fs.writeFile(file, JSON.stringify(data, null, 2) + "\n", "utf8");
 }
-
 function dedupe(items) {
   const seen = new Set();
   const out = [];
@@ -142,6 +136,7 @@ function dedupe(items) {
   return out;
 }
 
+// ---------- main ----------
 async function main() {
   const base = await fetchFeedWithFallbacks(FEED_BASE);
   const all = (base.items || []).map(normalizeItem);
@@ -161,8 +156,4 @@ async function main() {
 
   console.log(`Wrote index.json (${untagged.length}), ${SIGNS.length} tag files, all.json (${merged.length})`);
 }
-
-main().catch(e => {
-  console.error(e);
-  process.exit(1);
-});
+main().catch(e => { console.error(e); process.exit(1); });
