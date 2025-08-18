@@ -10,7 +10,7 @@ export default function Wheel() {
       className="relative max-w-3xl mx-auto p-6"
     >
       <motion.img
-        src="/assets/hero/zodiac_wheel.png"
+        src="/assets/hero/zodiac_wheel_v2.png"
         alt="Zodiac wheel"
         className="w-full"
         animate={{ rotate: 360 }}
