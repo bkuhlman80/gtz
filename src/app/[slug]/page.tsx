@@ -19,7 +19,8 @@ type Sign = {
   modality?: string; dateRange?: string; gameSlug?: string;
 };
 
-export async function generateMetadata({ params }: { params: Params }) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function generateMetadata({ params }: any) {
   const sign = (SIGNS as readonly Sign[]).find(s => s.slug === params.slug);
   if (!sign) return {};
   const og = `/og/signs/${sign.slug}.png`;
@@ -30,7 +31,8 @@ export async function generateMetadata({ params }: { params: Params }) {
   };
 }
 
-export default async function SignPage({ params }: { params: Params }) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export default async function SignPage({ params }: any) {
   const { slug } = params;            
   const sign = (SIGNS as readonly Sign[]).find(s => s.slug === slug);
   if (!sign) return notFound();

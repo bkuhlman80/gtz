@@ -21,7 +21,7 @@
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "remark-gfm": "^4.0.1"
-  },
+  }, 
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@playwright/test": "^1.54.2",
