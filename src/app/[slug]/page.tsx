@@ -19,9 +19,9 @@ type Sign = {
 };
 
 export async function generateMetadata({ params }: { params: Params }) {
-  const sign = (SIGNS as ReadonlyArray<Sign>).find(s => s.slug === params.slug);
+  const sign = (SIGNS as readonly Sign[]).find(s => s.slug === params.slug);
   if (!sign) return {};
-  const og = `/og/signs/${sign.slug}.png`; // put files in public/og/signs/
+  const og = `/og/signs/${sign.slug}.png`;
   return {
     title: `${sign.name} Gaming`,
     openGraph: { images: [og] },
@@ -30,11 +30,13 @@ export async function generateMetadata({ params }: { params: Params }) {
 }
 
 export default async function SignPage({ params }: { params: Params }) {
-  const { slug } = params; // no Promise
-  const sign = (SIGNS as ReadonlyArray<Sign>).find(s => s.slug === slug);
+  const { slug } = params;            
+  const sign = (SIGNS as readonly Sign[]).find(s => s.slug === slug);
   if (!sign) return notFound();
-  const posts = getPostsForSign(slug);
+
+  const posts = getPostsForSign(slug); 
   const cover = sign.gameSlug ? coverBySlug(sign.gameSlug) : null;
+
   return (
     <main className="max-w-6xl mx-auto p-4">
       <nav className="mb-4" aria-label="Breadcrumb">
