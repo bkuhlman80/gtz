@@ -1,28 +1,16 @@
-import fs from "fs/promises";
+import fs from "fs";
 import path from "path";
+import type { SubstackPost } from "@/components/SubstackPostCard";
 
-const ROOT = process.cwd();
-const BASE = path.join(ROOT, "data", "substack");
+const FILE = path.join(process.cwd(), "data", "substack", "all.json"); // adjust if needed
 
-export type SubstackItem = {
-  id: string;
-  title: string;
-  url: string;
-  isoDate?: string | null;
-  tags?: string[];
-  excerpt?: string | null;
-  subtitle?: string | null;
-  image?: string | null;
-};
-
-export async function getUntaggedPosts(): Promise<SubstackItem[]>  {
-  const p = path.join(BASE, "index.json");
-  const raw = await fs.readFile(p, "utf8");
-  return JSON.parse(raw);
+export function getAllSubstackPosts(): SubstackPost[] {
+  const raw = fs.readFileSync(FILE, "utf8");
+  const posts: SubstackPost[] = JSON.parse(raw);
+  return posts.sort((a, b) => +new Date(b.isoDate) - +new Date(a.isoDate));
 }
 
-export async function getPostsBySign(slug: string): Promise<SubstackItem[]>  {
-  const p = path.join(BASE, "byTag", `${slug}.json`);
-  const raw = await fs.readFile(p, "utf8");
-  return JSON.parse(raw);
+export function getSubstackPostsForSign(slug: string): SubstackPost[] {
+  const s = slug.toLowerCase();
+  return getAllSubstackPosts().filter(p => (p.tags || []).map(t => t.toLowerCase()).includes(s));
 }

@@ -10,9 +10,11 @@ import SpotifyEmbed from "@/components/mdx/SpotifyEmbed";
 import Link from "next/link";
 import Image from "next/image";
 import ZoomImg from "@/components/ZoomImg";
-import { getPostsBySign, type SubstackItem } from "@/lib/substack";
 import { Suspense } from "react";
 import type { Metadata } from "next";
+import { getSubstackPostsForSign } from "@/lib/substack";
+import SubstackPostCard from "@/components/SubstackPostCard";
+
 
 
 type Sign = {
@@ -147,6 +149,15 @@ export default async function SignPage(
           </article>
         ))}
       </section>
+
+const substack = getSubstackPostsForSign(slug);
+
+<section className="mt-12">
+  <h2 className="text-4xl font-bold">From Substack</h2>
+  <div className="mt-6 space-y-10">
+    {substack.map(p => <SubstackPostCard key={p.id} post={p} />)}
+  </div>
+</section>
 
       <Suspense fallback={null}>
         <SubstackSection slug={slug} />
