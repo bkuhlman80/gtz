@@ -2,17 +2,18 @@
   "name": "gtz",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
+    "substack:pull": "node scripts/fetch-substack.mjs",
     "dev": "next dev --turbopack",
     "build": "rm -rf .next && next build",
     "start": "next start",
     "lint": "next lint",
-    "substack:pull": "node scripts/fetch-substack.mjs",
     "test:ui": "playwright test --reporter=html",
     "test:ui:headed": "playwright test --headed --reporter=html",
     "test:report": "playwright show-report"
   },
-  "dependencies": {
+  "dependencies": 
     "@vercel/analytics": "^1.5.0",
     "framer-motion": "^12.23.12",
     "gray-matter": "^4.0.3",
