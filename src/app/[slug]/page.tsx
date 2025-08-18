@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { SIGNS } from "@/data/signs";
 import { notFound } from "next/navigation";
 import { getPostsForSign } from "@/lib/mdx";
@@ -10,22 +11,14 @@ import SpotifyEmbed from "@/components/mdx/SpotifyEmbed";
 import Link from "next/link";
 import Image from "next/image";
 import ZoomImg from "@/components/ZoomImg";
-import { Suspense } from "react";
 import type { Metadata } from "next";
 import { getSubstackPostsForSign } from "@/lib/substack";
 import SubstackPostCard from "@/components/SubstackPostCard";
 
-
-
-type Sign = {
-  slug: string; name: string; image: string; element: string;
-  modality?: string; dateRange?: string; gameSlug?: string;
-};
-
 export async function generateMetadata(
-  { params }: { params: Promise<{ slug: string }> }
+  { params }: { params: { slug: string } }
 ): Promise<Metadata> {
-  const { slug } = await params;
+  const { slug } = params;
   const sign = SIGNS.find(s => s.slug === slug);
   if (!sign) return {};
   const og = `/og/signs/${sign.slug}.png`;
@@ -36,47 +29,16 @@ export async function generateMetadata(
   };
 }
 
-
-async function SubstackSection({ slug }: { slug: string }) {
-  const items: SubstackItem[] = await getPostsBySign(slug);
-  if (!items?.length) return null;
-  return (
-    <section className="mt-12">
-      <h2 className="text-2xl font-bold">From Substack</h2>
-      <ul className="mt-4 space-y-3">
-        {items.map((it) => (
-          <li key={it.id}>
-            <a
-              className="underline"
-              href={it.url}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              {it.title}
-            </a>
-            {it.isoDate && (
-              <span className="ml-2 opacity-70 text-sm">
-                ({new Date(it.isoDate).toLocaleDateString()})
-              </span>
-            )}
-          </li>
-        ))}
-      </ul>
-    </section>
-  );
-}
-
-export default async function SignPage(
-  { params }: { params: Promise<{ slug: string }> }
-) {
-  const { slug } = await params;
+export default function SignPage({ params }: { params: { slug: string } }) {
+  const { slug } = params;
   const sign = SIGNS.find(s => s.slug === slug);
   if (!sign) return notFound();
 
   const posts = getPostsForSign(slug);
   const cover = sign.gameSlug ? coverBySlug(sign.gameSlug) : null;
-  
-  
+
+  // Substack posts for this sign
+  const substack = getSubstackPostsForSign(slug);
 
   return (
     <main className="max-w-6xl mx-auto p-4">
@@ -150,18 +112,16 @@ export default async function SignPage(
         ))}
       </section>
 
-const substack = getSubstackPostsForSign(slug);
-
-<section className="mt-12">
-  <h2 className="text-4xl font-bold">From Substack</h2>
-  <div className="mt-6 space-y-10">
-    {substack.map(p => <SubstackPostCard key={p.id} post={p} />)}
-  </div>
-</section>
-
-      <Suspense fallback={null}>
-        <SubstackSection slug={slug} />
-      </Suspense>
+      {substack.length > 0 && (
+        <section className="mt-12">
+          <h2 className="text-4xl font-bold">From Substack</h2>
+          <div className="mt-6 space-y-10">
+            {substack.map(p => (
+              <SubstackPostCard key={p.id} post={p} />
+            ))}
+          </div>
+        </section>
+      )}
     </main>
   );
 }
