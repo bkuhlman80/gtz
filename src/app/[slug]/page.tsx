@@ -1,4 +1,3 @@
-
 import { SIGNS } from "@/data/signs";
 import { notFound } from "next/navigation";
 import { getPostsForSign } from "@/lib/mdx";
@@ -12,14 +11,14 @@ import Link from "next/link";
 import Image from "next/image";
 import ZoomImg from "@/components/ZoomImg";
 import { getPostsBySign, type SubstackItem } from "@/lib/substack";
+import { Suspense } from "react";
 
 type Sign = {
   slug: string; name: string; image: string; element: string;
   modality?: string; dateRange?: string; gameSlug?: string;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function generateMetadata({ params }: any) {
+export async function generateMetadata({ params }: { params: { slug: string } }) {
   const sign = (SIGNS as readonly Sign[]).find(s => s.slug === params.slug);
   if (!sign) return {};
   const og = `/og/signs/${sign.slug}.png`;
@@ -37,9 +36,21 @@ async function SubstackSection({ slug }: { slug: string }) {
     <section className="mt-12">
       <h2 className="text-2xl font-bold">From Substack</h2>
       <ul className="mt-4 space-y-3">
-        {items.map((it: SubstackItem) => (
+        {items.map((it) => (
           <li key={it.id}>
-            <a className="underline" href={it.url}>{it.title}</a>
+            <a
+              className="underline"
+              href={it.url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {it.title}
+            </a>
+            {it.isoDate && (
+              <span className="ml-2 opacity-70 text-sm">
+                ({new Date(it.isoDate).toLocaleDateString()})
+              </span>
+            )}
           </li>
         ))}
       </ul>
@@ -47,13 +58,12 @@ async function SubstackSection({ slug }: { slug: string }) {
   );
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default async function SignPage({ params }: any) {
-  const { slug } = params;            
+export default async function SignPage({ params }: { params: { slug: string } }) {
+  const { slug } = params;
   const sign = (SIGNS as readonly Sign[]).find(s => s.slug === slug);
   if (!sign) return notFound();
 
-  const posts = getPostsForSign(slug); 
+  const posts = getPostsForSign(slug);
   const cover = sign.gameSlug ? coverBySlug(sign.gameSlug) : null;
 
   return (
@@ -65,13 +75,13 @@ export default async function SignPage({ params }: any) {
       </nav>
 
       <header className="flex items-center gap-4">
-<Image
-  src={sign.image}
-  alt={sign.name}
-  width={96}
-  height={96}
-  className="w-24 h-24 rounded-xl"
-/>
+        <Image
+          src={sign.image}
+          alt={sign.name}
+          width={96}
+          height={96}
+          className="w-24 h-24 rounded-xl"
+        />
         <div>
           <h1 className="text-4xl">{sign.name}</h1>
           <p className="opacity-70">{sign.element}</p>
@@ -86,54 +96,51 @@ export default async function SignPage({ params }: any) {
           </p>
         )}
 
-{posts.map((p) => (
-  <article key={p.slug} className="bg-[#1a1b1d] p-5 rounded-2xl prose prose-invert max-w-none space-y-6">
-    <h2 className="!mt-0 text-2xl font-bold">{p.title}</h2>
+        {posts.map((p) => (
+          <article key={p.slug} className="bg-[#1a1b1d] p-5 rounded-2xl prose prose-invert max-w-none space-y-6">
+            <h2 className="!mt-0 text-2xl font-bold">{p.title}</h2>
 
-    {p.spotifyUrl && <SpotifyEmbed url={p.spotifyUrl} />}
+            {p.spotifyUrl && <SpotifyEmbed url={p.spotifyUrl} />}
 
-<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-  {/* Playlist screenshot */}
-  {p.cover && (
-    <div className="w-full h-80 rounded-xl border border-neutral-700 bg-black/30 p-2 flex items-center justify-center">
-      <ZoomImg
-        src={p.cover}
-        alt={`${sign.name} playlist preview`}
-        className="w-full h-full object-contain rounded-lg"
-      />
-    </div>
-  )}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {p.cover && (
+                <div className="w-full h-80 rounded-xl border border-neutral-700 bg-black/30 p-2 flex items-center justify-center">
+                  <ZoomImg
+                    src={p.cover}
+                    alt={`${sign.name} playlist preview`}
+                    className="w-full h-full object-contain rounded-lg"
+                  />
+                </div>
+              )}
 
-  {/* Game art */}
-  {cover && (
-    <div className="w-full h-80 rounded-xl border border-neutral-700 bg-black/30 p-2 flex items-center justify-center">
-      <GameCover
-        title={cover.title}
-        year={cover.year}
-        cdn_webp={cover.cdn_webp}
-        cdn_png={cover.cdn_png}
-        credit_text={cover.credit_text}
-        credit_href={cover.credit_href}
-        alt={`${cover.title} (${cover.year})`}
-        className="w-full h-full object-contain rounded-lg"
-      />
-    </div>
-  )}
-</div>
+              {cover && (
+                <div className="w-full h-80 rounded-xl border border-neutral-700 bg-black/30 p-2 flex items-center justify-center">
+                  <GameCover
+                    title={cover.title}
+                    year={cover.year}
+                    cdn_webp={cover.cdn_webp}
+                    cdn_png={cover.cdn_png}
+                    credit_text={cover.credit_text}
+                    credit_href={cover.credit_href}
+                    alt={`${cover.title} (${cover.year})`}
+                    className="w-full h-full object-contain rounded-lg"
+                  />
+                </div>
+              )}
+            </div>
 
-    <MDXRemote
-      source={p.body}
-      options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }}
-      components={{ GameBlock, SpotifyEmbed }}
-    />
-  </article>
-))}
-
+            <MDXRemote
+              source={p.body}
+              options={{ mdxOptions: { remarkPlugins: [remarkGfm] } }}
+              components={{ GameBlock, SpotifyEmbed }}
+            />
+          </article>
+        ))}
       </section>
 
-      {/* New Substack section */}
-      <SubstackSection slug={slug} />
-
+      <Suspense fallback={null}>
+        <SubstackSection slug={slug} />
+      </Suspense>
     </main>
   );
 }
