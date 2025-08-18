@@ -13,7 +13,7 @@
     "test:ui:headed": "playwright test --headed --reporter=html",
     "test:report": "playwright show-report"
   },
-  "dependencies": 
+  "dependencies": {
     "@vercel/analytics": "^1.5.0",
     "framer-motion": "^12.23.12",
     "gray-matter": "^4.0.3",
@@ -39,5 +39,7 @@
     "tailwindcss": "^4.1.11",
     "typescript": "^5"
   },
-  "engines": { "node": "20.x" }
+  "engines": {
+    "node": "20.x"
+  }
 }
