@@ -8,17 +8,48 @@ const OUT = path.join(ROOT, "data", "substack");
 const BYTAG = path.join(OUT, "byTag");
 const FEED_BASE = "https://z0di.substack.com/feed";
 
-// canonical sign slugs
 const SIGNS = [
   "aries","taurus","gemini","cancer","leo","virgo",
   "libra","scorpio","sagittarius","capricorn","aquarius","pisces"
 ];
 
-// basic aliases you might use
 const ALIAS = new Map([
   ["sag", "sagittarius"],
   ["scorp", "scorpio"]
 ]);
+
+const parser = new Parser({
+  headers: { "User-Agent": "gtz-rss/1.0 (+https://gtz-one.vercel.app)" }
+});
+
+const sleep = (ms) => new Promise(r => setTimeout(r, ms));
+
+async function fetchFeedWithFallbacks(baseUrl, tag) {
+  const urls = tag
+    ? [
+        `${baseUrl}?tag=${encodeURIComponent(tag)}`,
+        `${baseUrl.replace(/\/feed$/, "/feed.rss")}?tag=${encodeURIComponent(tag)}`
+      ]
+    : [baseUrl, baseUrl.replace(/\/feed$/, "/feed.rss")];
+
+  let lastErr;
+  for (const url of urls) {
+    // simple retry x2 per URL
+    for (let attempt = 1; attempt <= 2; attempt++) {
+      try {
+        console.log(`Fetching RSS (${attempt}/2): ${url}`);
+        const feed = await parser.parseURL(url);
+        // Return even if empty; caller can handle empty lists
+        return feed || { items: [] };
+      } catch (e) {
+        lastErr = e;
+        console.error(`RSS fetch failed [${url}] attempt ${attempt}: ${e?.message || e}`);
+        await sleep(500 * attempt);
+      }
+    }
+  }
+  throw lastErr || new Error("All RSS fallbacks failed");
+}
 
 const normTag = (t) => {
   if (!t) return null;
@@ -26,7 +57,8 @@ const normTag = (t) => {
   return ALIAS.get(v) || v;
 };
 
-const stripHtml = (s="") => s.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
+const stripHtml = (s = "") =>
+  s.replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim();
 
 const normalizeItem = (it) => ({
   id: it.guid || it.id || it.link,
@@ -55,27 +87,26 @@ function dedupe(items) {
 }
 
 async function main() {
-  const parser = new Parser();
-  const base = await parser.parseURL(FEED_BASE);
-
+  const base = await fetchFeedWithFallbacks(FEED_BASE);
   const all = (base.items || []).map(normalizeItem);
 
+  // write untagged
   const untagged = all.filter(i => (i.tags?.length || 0) === 0).sort(sortDesc);
   await writeJSON(path.join(OUT, "index.json"), untagged);
 
+  // write each sign by filtering the one base feed
+  const perTag = {};
   for (const tag of SIGNS) {
-    // tag-specific feed is cleaner than filtering base
-    const feed = await parser.parseURL(`${FEED_BASE}?tag=${encodeURIComponent(tag)}`);
-    const items = (feed.items || []).map(normalizeItem);
-    const list = dedupe(items).sort(sortDesc);
+    const list = all.filter(i => i.tags?.includes(tag)).sort(sortDesc);
+    perTag[tag] = list;
     await writeJSON(path.join(BYTAG, `${tag}.json`), list);
   }
 
-  // optional: single merged file for other uses
-  const merged = dedupe([...untagged, ...SIGNS.flatMap(() => [])]).sort(sortDesc);
+  // merged
+  const merged = dedupe([...untagged, ...Object.values(perTag).flat()]).sort(sortDesc);
   await writeJSON(path.join(OUT, "all.json"), merged);
 
-  console.log(`Wrote: index.json (${untagged.length}) and ${SIGNS.length} tag files`);
+  console.log(`Wrote index.json (${untagged.length}), ${SIGNS.length} tag files, all.json (${merged.length})`);
 }
 
 main().catch(e => {
