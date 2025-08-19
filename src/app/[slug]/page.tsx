@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 import { SIGNS } from "@/data/signs";
 import { notFound } from "next/navigation";
 import { getPostsForSign } from "@/lib/mdx";
@@ -16,9 +15,9 @@ import { getSubstackPostsForSign } from "@/lib/substack";
 import SubstackPostCard from "@/components/SubstackPostCard";
 
 export async function generateMetadata(
-  { params }: { params: { slug: string } }
+  { params }: { params: Promise<{ slug: string }> }
 ): Promise<Metadata> {
-  const { slug } = params;
+  const { slug } = await params;
   const sign = SIGNS.find(s => s.slug === slug);
   if (!sign) return {};
   const og = `/og/signs/${sign.slug}.png`;
@@ -29,15 +28,15 @@ export async function generateMetadata(
   };
 }
 
-export default function SignPage({ params }: { params: { slug: string } }) {
-  const { slug } = params;
+export default async function SignPage(
+  { params }: { params: Promise<{ slug: string }> }
+) {
+  const { slug } = await params;
   const sign = SIGNS.find(s => s.slug === slug);
   if (!sign) return notFound();
 
   const posts = getPostsForSign(slug);
   const cover = sign.gameSlug ? coverBySlug(sign.gameSlug) : null;
-
-  // Substack posts for this sign
   const substack = getSubstackPostsForSign(slug);
 
   return (
@@ -49,13 +48,7 @@ export default function SignPage({ params }: { params: { slug: string } }) {
       </nav>
 
       <header className="flex items-center gap-4">
-        <Image
-          src={sign.image}
-          alt={sign.name}
-          width={96}
-          height={96}
-          className="w-24 h-24 rounded-xl"
-        />
+        <Image src={sign.image} alt={sign.name} width={96} height={96} className="w-24 h-24 rounded-xl" />
         <div>
           <h1 className="text-4xl">{sign.name}</h1>
           <p className="opacity-70">{sign.element}</p>
