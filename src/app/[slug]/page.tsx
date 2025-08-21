@@ -11,8 +11,11 @@ import Link from "next/link";
 import Image from "next/image";
 import ZoomImg from "@/components/ZoomImg";
 import type { Metadata } from "next";
-import { getSubstackPostsForSign } from "@/lib/substack";
+import { getSubstackPostsForSign } from "@/lib/substack-live";
 import SubstackPostCard from "@/components/SubstackPostCard";
+
+
+export const runtime = "nodejs";
 
 export async function generateMetadata(
   { params }: { params: Promise<{ slug: string }> }
@@ -37,7 +40,8 @@ export default async function SignPage(
 
   const posts = getPostsForSign(slug);
   const cover = sign.gameSlug ? coverBySlug(sign.gameSlug) : null;
-  const substack = getSubstackPostsForSign(slug);
+const substack = await getSubstackPostsForSignLive(slug);
+
 
   return (
     <main className="max-w-6xl mx-auto p-4">

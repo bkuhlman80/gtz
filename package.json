@@ -3,16 +3,22 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
+  
+  {
   "scripts": {
     "substack:pull": "node scripts/fetch-substack.mjs",
+    "prebuild": "npm run substack:pull || true",
     "dev": "next dev --turbopack",
-    "build": "rm -rf .next && next build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "revalidate:local": "curl \"http://localhost:3000/api/revalidate?token=$REVALIDATE_TOKEN\"",
     "test:ui": "playwright test --reporter=html",
     "test:ui:headed": "playwright test --headed --reporter=html",
     "test:report": "playwright show-report"
-  },
+  }
+}
+
   "dependencies": {
     "@vercel/analytics": "^1.5.0",
     "framer-motion": "^12.23.12",
