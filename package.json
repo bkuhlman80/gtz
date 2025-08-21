@@ -16,9 +16,7 @@
     "test:ui": "playwright test --reporter=html",
     "test:ui:headed": "playwright test --headed --reporter=html",
     "test:report": "playwright show-report"
-  }
-}
-
+  },
   "dependencies": {
     "@vercel/analytics": "^1.5.0",
     "framer-motion": "^12.23.12",
