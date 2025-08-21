@@ -1,7 +1,7 @@
-import { getAllSubstackPosts } from "@/lib/substack";
-import SubstackPostCard from "@/components/SubstackPostCard";
-
 export const runtime = "nodejs";
+
+import { getSubstackLiveAll } from "@/lib/substack-live";
+import SubstackPostCard from "@/components/SubstackPostCard";
 
 export default async function BlogPage() {
   const posts = await getSubstackLiveAll();
