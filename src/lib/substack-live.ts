@@ -2,7 +2,7 @@
 export const runtime = "nodejs";
 import "server-only";
 import Parser from "rss-parser";
-import bakedAll from "@/data/substack/all.json";
+import bakedAll from "../../data/substack/all.json";
 
 export type SubstackPost = {
   id: string;
