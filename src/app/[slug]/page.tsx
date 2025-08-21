@@ -11,7 +11,7 @@ import Link from "next/link";
 import Image from "next/image";
 import ZoomImg from "@/components/ZoomImg";
 import type { Metadata } from "next";
-import { getSubstackPostsForSign } from "@/lib/substack-live";
+import { getSubstackPostsForSignLive } from "@/lib/substack-live";
 import SubstackPostCard from "@/components/SubstackPostCard";
 
 
