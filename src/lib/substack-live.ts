@@ -1,7 +1,8 @@
 // Node runtime needed for rss-parser
 export const runtime = "nodejs";
-
 import Parser from "rss-parser";
+import bakedAll from "@/data/substack/all.json"; // <-- static import
+
 
 export type SubstackPost = {
   id: string;
@@ -121,17 +122,15 @@ async function fetchWithRetry(url: string, tries = 3) {
 }
 
 // ---------- public API ----------
-export async function getSubstackLiveAll(): Promise<SubstackPost[]> {
+export async function getSubstackLiveAll() {
   try {
-    const res = await fetchWithRetry(FEED_URL);
+    const res = await fetchWithRetry("https://z0di.substack.com/feed");
     const xml = await res.text();
     const feed = await parser.parseString(xml);
     const items = (feed.items ?? []).map(normalizeItem).sort(sortDesc);
     return items;
   } catch {
-    // fallback to baked JSON
-    const baked = (await import("@/data/substack/all.json")).default as SubstackPost[];
-    return baked.sort(sortDesc);
+    return (bakedAll as any[]).sort(sortDesc); // fallback
   }
 }
 
