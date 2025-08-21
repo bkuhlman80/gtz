@@ -1,6 +1,7 @@
-export const runtime = "nodejs";
 
 import { revalidateTag } from "next/cache";
+
+export const runtime = "nodejs";
 
 export async function GET(req: Request) {
   const url = new URL(req.url);

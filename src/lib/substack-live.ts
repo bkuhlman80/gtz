@@ -1,5 +1,5 @@
 // Node runtime needed for rss-parser
-export const runtime = "nodejs";
+import "server-only";
 import Parser from "rss-parser";
 import bakedAll from "@/data/substack/all.json"; // <-- static import
 

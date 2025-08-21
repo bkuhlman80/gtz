@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import "server-only";
 import type { SubstackPost } from "@/components/SubstackPostCard";
 
 const FILE = path.join(process.cwd(), "data", "substack", "all.json"); // adjust if needed

@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 import ZoomBadge from "@/components/ZoomBadge";
 
+export const runtime = "nodejs";
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://gtz-one.vercel.app"),
   title: "Z0DI",
