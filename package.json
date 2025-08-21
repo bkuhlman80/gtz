@@ -3,8 +3,6 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  
-  {
   "scripts": {
     "substack:pull": "node scripts/fetch-substack.mjs",
     "prebuild": "npm run substack:pull || true",
