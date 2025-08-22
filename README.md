@@ -1,36 +1,45 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Z0DI is the app's overarching brand. GTZ is the first implementation (v0).
 
-## Getting Started
+# GTZ = Gaming the Zodiac
 
-First, run the development server:
+**Gaming the Zodiac** is a Next.js 15 app that blends astrology, Spotify playlists, and retro gaming.
+
+## Features
+
+- **Dynamic landing page (`/`)**
+  - Hero section with logo, zodiac wheel, and intro
+  - Grid of 12 zodiac sign cards
+  - Substack subscription embed
+
+- **Sign pages (`/[slug]`)**
+  - Each of the 12 signs has an MDX file in `/content`
+  - MDX includes: curated Spotify playlist + retro game recommendation
+  - Components: `SpotifyEmbed`, `GameCover`, `ZoomImg`, `SubstackPostCard`
+
+- **Substack integration**
+  - `/api/rss-proxy`: fetches Substack RSS safely
+  - `/api/revalidate`: triggers Next.js ISR revalidation
+  - GitHub Action (`.github/workflows/substack.yml`): runs every 30 minutes
+    - Pulls fresh Substack feed via `scripts/fetch-substack.mjs`
+    - Writes JSON cache into `/data/substack`
+    - Site uses cached data at runtime (`src/lib/substack-live.ts`)
+
+- **Content & media**
+  - `/content/*/gaming_*.mdx`: 12 posts, one per sign
+  - `/public/assets`: brand/logo, hero art, zodiac icons
+  - `/public/og`: Open Graph images for sharing links
+  - `/public/playlists`: screenshots of Spotify playlists
+  - `/public/games`: retro game cover art
+
+- **Deployment**
+  - Built with Next.js 15 (App Router, MDX support)
+  - Hosted on Vercel (builds from `main` branch)
+  - Incremental Static Regeneration for fresh Substack content
+
+## Development
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+npm ci
+npm run dev     # start dev server
+npm run build   # production build
+npm run start   # run prod build locally
